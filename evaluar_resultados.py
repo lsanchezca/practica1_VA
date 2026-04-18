@@ -10,6 +10,8 @@ import csv
 import argparse
 import os
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 
@@ -374,7 +376,14 @@ if __name__ == "__main__":
     plt.xlabel("Recall")
     plt.ylabel("Precision")
     plt.title("Comparación con práctica profesores (IoU>0.5)")
-    plt.legend
+    plt.legend()
+    print("\n" + "="*60)
+    print("RESULTADOS - IoU > 0.5 (50% overlap)")
+    print("="*60)
+    print(f"Tu resultado (Prác-1):      AP = {ap1_det*100:.2f}%")
+    print(f"Referencia (Profesor):      AP = {ap1_1*100:.2f}%")
+    plt.savefig('precision_recall_IoU_0.5.png', dpi=100, bbox_inches='tight')
+    print("Gráfico guardado: precision_recall_IoU_0.5.png")
     
     # --------------------------------------------------------------------------------------------
     #  Figure with overlap (IoU) theshold of 0.7 (>=70% overlap is considered a correct detection)
@@ -398,6 +407,12 @@ if __name__ == "__main__":
     plt.xlabel("Recall")
     plt.ylabel("Precision")
     plt.title("Comparación con práctica profesores  (IoU>0.7)")
-    plt.legend
-    plt.show()
-    plt.draw()
+    plt.legend()
+    print("\n" + "="*60)
+    print("RESULTADOS - IoU > 0.7 (70% overlap)")
+    print("="*60)
+    print(f"Tu resultado (Prác-1):      AP = {ap1_det*100:.2f}%")
+    print(f"Referencia (Profesor):      AP = {ap1_1*100:.2f}%")
+    plt.savefig('precision_recall_IoU_0.7.png', dpi=100, bbox_inches='tight')
+    print("Gráfico guardado: precision_recall_IoU_0.7.png")
+    print("="*60 + "\n")
