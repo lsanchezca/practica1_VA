@@ -12,7 +12,7 @@ class PanelDetector:
         # 1. Pasar el recorte a HSV 
         hsv_roi = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
         
-        # 2. Definir el rango del azul en HSV (ajustar tras ver imágenes de train)
+        # 2. Definir el rango del azul en HSV
         # El azul suele estar entre 100-130 en OpenCV Hue
         lower_blue = np.array([100, 100, 50])
         upper_blue = np.array([130, 255, 255])
@@ -21,10 +21,10 @@ class PanelDetector:
         mask = cv2.inRange(hsv_roi, lower_blue, upper_blue)
         mask = (mask > 0).astype(np.float32)
         
-        # 4. Redimensionar a tamaño fijo (p.ej. 40x80) para correlar
+        # 4. Redimensionar a tamaño fijo para correlar
         mask_resized = cv2.resize(mask, (80, 40))
         
-        # 5. Máscara ideal: un panel de carretera es casi todo azul
+        # 5. Máscara ideal
         ideal_mask = np.ones((40, 80), dtype=np.float32)
         
         # 6. Correlación (multiplicar elemento a elemento y sumar)
@@ -78,7 +78,7 @@ class PanelDetector:
             # Nos quedamos SOLO con los índices cuyo solapamiento sea menor al umbral
             inds = np.where(iou <= overlap_thresh)[0]
             
-            # Actualizamos la lista (+1 porque el array inds no incluye la caja 'i')
+            # Actualizamos la lista
             orden = orden[inds + 1]
 
         return cajas_finales
@@ -124,7 +124,6 @@ class PanelDetector:
             # Filtrado por relación de aspecto
             aspect_ratio = w / float(h)
             if 0.5 < aspect_ratio < 4.0:
-                # Agrandar rectángulo para incluir borde blanco
                 # x1, y1, x2, y2, score
                 score = self.calcular_score(image[y:y+h, x:x+w])
                 if score > 0.4:
@@ -133,7 +132,7 @@ class PanelDetector:
         # Eliminamos primero las repetidas clásicas (ventanas casi idénticas de MSER)
         detecciones_sin_repetidas = self.non_maximum_suppression(detecciones)
         
-        # Aplicamos tu idea original: eliminar las que han quedado completamente dentro de otra
+        # Eliminamos las que han quedado completamente dentro de otra
         detecciones_finales = self.eliminar_anidadas(detecciones_sin_repetidas)
         
         # Devolvemos el resultado final
@@ -197,5 +196,3 @@ if __name__ == "__main__":
                 cv2.imwrite(os.path.join("resultado_imgs", img_name), img)
 
     print("Proceso finalizado. Resultados guardados en resultado.txt y resultado_imgs/")
-
-    # Evaluate detections

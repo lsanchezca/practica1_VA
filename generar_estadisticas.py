@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import os
 import csv
 from evaluar_resultados import load_results_file, BoundingBox, bboxes_overlap
